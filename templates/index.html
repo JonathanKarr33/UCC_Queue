@@ -14,7 +14,6 @@
         <tr>
             <th>Name (not needed)</th>
             <th>ID</th>
-            <th>UID</th>
             <th>Added</th>
             <th>Actions</th>
         </tr>
@@ -22,12 +21,9 @@
             <tr>
                 <td>{{ task.content }}</td>
                 <td>{{ task.id }}</td>
-                <td>{{ task.date_created.strftime('%s') | int % 1000 }}</td>
                 <td>{{ task.date_created.strftime('%Y-%m-%d %H:%M') }}</td>
                 <td>
                     <a href="/delete/{{task.id}}">Delete</a>
-                    <br>
-                    <a href="/update/{{task.id}}">Info</a>
                 </td>
             </tr>
         {% endfor %}
