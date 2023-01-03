@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Take A Screenshot of your Information</title>
+{% endblock %}
+
+{% block body %}
+    <h1 style="text-align: center">Take A Screenshot of your Information</h1>
+    <h4 style="text-align: center">Queue Number: {{ task.id }}</h4>
+    <h4 style="text-align: center">UID Number: {{ task.date_created.strftime('%s') | int % 1000 }}</h4>
+{% endblock %}

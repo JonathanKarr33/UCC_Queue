@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<h1 style="background-color:#0C2340; color: white;text-align: center">UCC Queue</h1>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center">UCC Queue</h1>
+    {% if tasks|length < 1 %}
+    <h4 style="text-align: center">There's no one in the queue. Add one below!</h4>
+    {% else %}
+    <table>
+        <tr>
+            <th>Name (not needed)</th>
+            <th>ID</th>
+            <th>UID</th>
+            <th>Added</th>
+            <th>Actions</th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.content }}</td>
+                <td>{{ task.id }}</td>
+                <td>{{ task.date_created.strftime('%s') | int % 1000 }}</td>
+                <td>{{ task.date_created.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a href="/delete/{{task.id}}">Delete</a>
+                    <br>
+                    <a href="/update/{{task.id}}">Info</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <div class="form">
+        <form action="/" method="POST">
+            <input type="text" name="content" id="content">
+            <input type="submit" value="Add to Queue">
+        </form>
+    </div>
+    <div class="lign">
+        <h4 style="text-align: center">Number of People in Queue: {{ tasks|length }}</h4>
+        <h4 style="text-align: center">Number of Councillors: {{ number_of_councillors }}</h4>
+        <h4 style="text-align: center">Individual Wait Time: {{ individual_wait_time }} minutes</h4>
+        <h4 style="text-align: center">Current Wait Time: {{ tasks|length * individual_wait_time / number_of_councillors }} minutes</h4>
+        
+        
+        
+        
+    </div>
+    <div class="wait form">
+        <form action="/" method="POST">
+            <input type="text" name="content" id="content">
+            <input type="submit" value="Update Individual Wait Time">
+        </form>
+    </div>
+</div>
+{% endblock %}
