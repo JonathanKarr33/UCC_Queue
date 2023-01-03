@@ -13,16 +13,18 @@ individual_wait_time = 30
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(200), nullable=False)
-    # db.Column(db.DateTime)
-    # db.Column(db.DateTime, default=datetime.utcnow)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
-    #uid = 4567
 
     def __repr__(self):
         return '<Task %r>' % self.id
 
+@app.route('/')
+def viewer():
+    tasks = Todo.query.order_by(Todo.date_created).all()
+    wait_time = len(tasks) * individual_wait_time / number_of_councillors
+    return render_template('viewer.html', wait_time=wait_time, is_open = bool(number_of_councillors))
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/portal', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
         task_content = request.form['content']
@@ -31,7 +33,7 @@ def index():
         try:
             db.session.add(new_task)
             db.session.commit()
-            return redirect('/')
+            return redirect('/portal')
         except:
             return 'There was an issue adding your task'
 
@@ -47,7 +49,7 @@ def delete(id):
     try:
         db.session.delete(task_to_delete)
         db.session.commit()
-        return redirect('/')
+        return redirect('/portal')
     except:
         return 'There was a problem deleting that task'
 
@@ -61,7 +63,7 @@ def update(id):
 
         try:
             db.session.commit()
-            return redirect('/')
+            return redirect('/portal')
         except:
             return 'There was an issue updating your task'
 
