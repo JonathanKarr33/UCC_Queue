@@ -12,16 +12,16 @@
     {% else %}
     <table>
         <tr>
-            <th>Name (not needed)</th>
             <th>ID</th>
             <th>Added</th>
+            <th>Additional info (optional)</th>
             <th>Actions</th>
         </tr>
         {% for task in tasks %}
             <tr>
-                <td>{{ task.content }}</td>
                 <td>{{ task.id }}</td>
                 <td>{{ task.date_created.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ task.content }}</td>
                 <td>
                     <a href="/delete/{{task.id}}">Delete</a>
                 </td>
@@ -30,9 +30,10 @@
     </table>
     {% endif %}
 
-    <div class="form">
+    <div class="form" align="center">
         <form action="/" method="POST">
             <input type="text" name="content" id="content">
+            <br>
             <input type="submit" value="Add to Queue">
         </form>
     </div>
@@ -40,15 +41,19 @@
         <h4 style="text-align: center">Number of People in Queue: {{ tasks|length }}</h4>
         <h4 style="text-align: center">Number of Councillors: {{ number_of_councillors }}</h4>
         <h4 style="text-align: center">Individual Wait Time: {{ individual_wait_time }} minutes</h4>
-        <h4 style="text-align: center">Current Wait Time: {{ tasks|length * individual_wait_time / number_of_councillors }} minutes</h4>
-        
-        
-        
-        
+        <h4 style="text-align: center">Approximate Wait Time: {{ tasks|length * individual_wait_time / number_of_councillors |round(1) }} minutes</h4>    
     </div>
-    <div class="wait form">
+    <div class="form" align="center">
         <form action="/" method="POST">
-            <input type="text" name="content" id="content">
+            <input type="number" step="1" name="num_councillors" id="num_councillors">
+            <br>
+            <input type="submit" value="Update Number Number of Councillors">
+        </form>
+    </div>
+    <div class="form" align="center">
+        <form action="/" method="POST">
+            <input type="number" step="1" name="ind_wait_time" id="ind_wait_time">
+            <br>
             <input type="submit" value="Update Individual Wait Time">
         </form>
     </div>

@@ -8,7 +8,7 @@
 <div class="content">
     <div class="lign">
         {% if is_open %}
-            <h4 style="text-align: center">Approximate Wait Time: {{ wait_time }} minutes</h4>
+            <h4 style="text-align: center">Approximate Wait Time: {{ wait_time |round(1) }} minutes</h4>
             <p style="text-align: left">Note: this is the approximate time once you check in at the UCC</p>
             <b></b>
             <p style="text-align: left">If this is your first time using UCC it will take approximatly 30 minutes to complete paperwork when you arrive</p>

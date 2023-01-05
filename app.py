@@ -18,24 +18,35 @@ class Todo(db.Model):
     def __repr__(self):
         return '<Task %r>' % self.id
 
-@app.route('/')
+"""@app.route('/')
 def viewer():
     tasks = Todo.query.order_by(Todo.date_created).all()
     wait_time = len(tasks) * individual_wait_time / number_of_councillors
-    return render_template('viewer.html', wait_time=wait_time, is_open = bool(number_of_councillors))
+    return render_template('viewer.html', wait_time=wait_time, is_open = bool(number_of_councillors))"""
 
-@app.route('/portal', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def index():
+    global number_of_councillors
+    global individual_wait_time
     if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = Todo(content=task_content)
-
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/portal')
-        except:
-            return 'There was an issue adding your task'
+        if 'ind_wait_time' in request.form and request.form['ind_wait_time'] != None:
+            print(request.form['ind_wait_time'])
+            individual_wait_time = int(request.form['ind_wait_time'])
+            tasks = Todo.query.order_by(Todo.date_created).all()
+            return render_template('index.html', tasks=tasks, individual_wait_time=individual_wait_time, number_of_councillors=number_of_councillors)
+        elif 'num_councillors' in request.form and request.form['num_councillors'] != None:
+            number_of_councillors = int(request.form['num_councillors'])
+            tasks = Todo.query.order_by(Todo.date_created).all()
+            return render_template('index.html', tasks=tasks, individual_wait_time=individual_wait_time, number_of_councillors=number_of_councillors)
+        elif 'content' in request.form:
+            task_content = request.form['content']
+            new_task = Todo(content=task_content)
+            try:
+                db.session.add(new_task)
+                db.session.commit()
+                return redirect('/')
+            except:
+                return 'There was an issue adding your task'
 
     else:
         tasks = Todo.query.order_by(Todo.date_created).all()
@@ -49,7 +60,7 @@ def delete(id):
     try:
         db.session.delete(task_to_delete)
         db.session.commit()
-        return redirect('/portal')
+        return redirect('/')
     except:
         return 'There was a problem deleting that task'
 
@@ -63,7 +74,7 @@ def update(id):
 
         try:
             db.session.commit()
-            return redirect('/portal')
+            return redirect('/')
         except:
             return 'There was an issue updating your task'
 
