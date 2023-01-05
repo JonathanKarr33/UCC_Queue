@@ -6,7 +6,6 @@
 
 {% block body %}
 <div class="content">
-    <h1 style="text-align: center">UCC Queue</h1>
     {% if tasks|length < 1 %}
     <h4 style="text-align: center">There's no one in the queue. Add one below!</h4>
     {% else %}
@@ -34,25 +33,35 @@
         <form action="/" method="POST">
             <input type="text" name="content" id="content">
             <br>
-            <input type="submit" value="Add to Queue">
+            <input type="submit" value="Add to Queue" href="/ucc_desk_portal">
         </form>
     </div>
     <div class="lign">
         <h4 style="text-align: center">Number of People in Queue: {{ tasks|length }}</h4>
-        <h4 style="text-align: center">Number of Councillors: {{ number_of_councillors }}</h4>
+        <h4 style="text-align: center">Number of Counselors: {{ number_of_counselors }}</h4>
         <h4 style="text-align: center">Individual Wait Time: {{ individual_wait_time }} minutes</h4>
-        <h4 style="text-align: center">Approximate Wait Time: {{ tasks|length * individual_wait_time / number_of_councillors |round(1) }} minutes</h4>    
+        {% if number_of_counselors > 0 %}
+            <h4 style="text-align: center">Approximate Wait Time: {{ tasks|length * individual_wait_time / number_of_counselors |round(1) }} minutes</h4>
+        {% else %}
+            <h4 style="text-align: center">The UCC is closed</h4>
+        {% endif %}    
     </div>
     <div class="form" align="center">
         <form action="/" method="POST">
-            <input type="number" step="1" name="num_councillors" id="num_councillors">
+            <input type="number" step="1"  min="0" name="num_counselors" id="num_counselors">
             <br>
-            <input type="submit" value="Update Number Number of Councillors">
+            <input type="submit" value="Update Number Number of Counselors">
+            <br>
+            {% if number_of_counselors > 0 %}
+                <p>When closing set the # of counselors to 0</p>
+            {% else %}
+                <p>When opening input the # of counselors</p>
+            {% endif %}
         </form>
     </div>
     <div class="form" align="center">
         <form action="/" method="POST">
-            <input type="number" step="1" name="ind_wait_time" id="ind_wait_time">
+            <input type="number" step="1"  min="0" name="ind_wait_time" id="ind_wait_time">
             <br>
             <input type="submit" value="Update Individual Wait Time">
         </form>
